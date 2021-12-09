@@ -11,8 +11,10 @@
  * @input string   $hover-icon-background-colour
  */
 
+@use 'sass:math';
+
 @mixin hover-transition($hover-type: 'circle', $hover-type-transition: 'fade', $hover-opacity: .7, $hover-background-colour: $primary-color, $hover-icon: '', $hover-icon-colour: $primary-color, $hover-icon-size: '1rem', $hover-icon-background-colour: $secondary-color) {
-  $hover-icon-size-rem: $hover-icon-size / 16rem !default;
+  $hover-icon-size-rem: math.div($hover-icon-size, 16rem) !default;
   $hover-icon-string: '' !default;
   
   @if function-exists(rem-calc) {
