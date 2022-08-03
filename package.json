@@ -2,5 +2,6 @@
   "name": "sass-hover-transition",
   "version": "1.0.2",
   "description": "",
-  "main": "sass-hover-transition.scss"
+  "main": "sass-hover-transition.scss",
+  "license": "LLVM-exception"
 }
