@@ -1,7 +1,4 @@
-/*!
-* sass-hover-transition
-* @license Apache-2.0 LLVM-exception
-*/
+/*! sass-hover-transition | @license Apache-2.0 LLVM-exception | https://github.com/thinknathan/sass-hover-transition/blob/master/LICENSE.txt */
 
 /**
  * Hover transition styles
@@ -16,123 +13,126 @@
  * @input string   $hover-icon-background-colour
  */
 
-@use 'sass:math';
+@use "sass:math";
 
-@mixin hover-transition($hover-type: 'circle', $hover-type-transition: 'fade', $hover-opacity: .7, $hover-background-colour: $primary-color, $hover-icon: '', $hover-icon-colour: $primary-color, $hover-icon-size: '1rem', $hover-icon-background-colour: $secondary-color) {
-  $hover-icon-size-rem: math.div($hover-icon-size, 16rem) !default;
-  $hover-icon-string: '' !default;
-  
-  @if function-exists(rem-calc) {
-    $hover-icon-size-rem: rem-calc($hover-icon-size);
-  }
+@mixin hover-transition(
+	$hover-type: "circle",
+	$hover-type-transition: "fade",
+	$hover-opacity: 0.7,
+	$hover-background-colour: $primary-color,
+	$hover-icon: "",
+	$hover-icon-colour: $primary-color,
+	$hover-icon-size: "1rem",
+	$hover-icon-background-colour: $secondary-color
+) {
+	$hover-icon-size-rem: math.div($hover-icon-size, 16rem) !default;
+	$hover-icon-string: "" !default;
 
-  @if function-exists(inline-icon) {
-    $hover-icon-string: inline-icon($hover-icon, $hover-icon-colour);
-  }
+	@if function-exists(rem-calc) {
+		$hover-icon-size-rem: rem-calc($hover-icon-size);
+	}
 
-  position: relative;
-  overflow: hidden;
+	@if function-exists(inline-icon) {
+		$hover-icon-string: inline-icon($hover-icon, $hover-icon-colour);
+	}
 
-  &::before,
-  &::after {
-    content: '';
-    display: block;
-    position: absolute;
-    opacity: 0;
-    transition: opacity $offcanvas-transition-length $offcanvas-transition-timing, transform $offcanvas-transition-length $offcanvas-transition-timing;
-  }
+	position: relative;
+	overflow: hidden;
 
-  &::after {
-    background-color: $hover-background-colour;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+	&::before,
+	&::after {
+		content: "";
+		display: block;
+		position: absolute;
+		opacity: 0;
+		transition: opacity $offcanvas-transition-length
+				$offcanvas-transition-timing,
+			transform $offcanvas-transition-length $offcanvas-transition-timing;
+	}
 
-    @if $hover-type-transition=='slide-up' {
-      transform: translateY(100%);
-    }
+	&::after {
+		background-color: $hover-background-colour;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
 
-    @else if $hover-type-transition=='slide-down' {
-      transform: translateY(-100%);
-    }
+		@if $hover-type-transition== "slide-up" {
+			transform: translateY(100%);
+		} @else if $hover-type-transition== "slide-down" {
+			transform: translateY(-100%);
+		} @else if $hover-type-transition== "slide-left" {
+			transform: translateX(100%);
+		} @else if $hover-type-transition== "slide-right" {
+			transform: translateX(-100%);
+		}
+	}
 
-    @else if $hover-type-transition=='slide-left' {
-      transform: translateX(100%);
-    }
+	@if $hover-icon != "" {
+		&::before {
+			@if $hover-type== "circle" {
+				background-color: $hover-icon-background-colour;
+				border-radius: $hover-icon-size-rem;
+			}
 
-    @else if $hover-type-transition=='slide-right' {
-      transform: translateX(-100%);
-    }
-  }
+			@if $hover-type== "square" {
+				background-color: $hover-icon-background-colour;
+			}
 
-  @if $hover-icon !='' {
-    &::before {
-      @if $hover-type=='circle' {
-        background-color: $hover-icon-background-colour;
-        border-radius: $hover-icon-size-rem;
-      }
+			padding: $hover-icon-size-rem;
+			left: 50%;
+			top: 50%;
+			z-index: 4;
+			background-repeat: no-repeat;
+			background-size: 50% 50%;
+			background-position: center center;
 
-      @if $hover-type=='square' {
-        background-color: $hover-icon-background-colour;
-      }
+			@if $hover-type-transition== "slide-up" {
+				transform: translate(-50%, 400%);
+			} @else if $hover-type-transition== "slide-down" {
+				transform: translate(-50%, -400%);
+			} @else if $hover-type-transition== "slide-left" {
+				transform: translate(400%, -50%);
+			} @else if $hover-type-transition== "slide-right" {
+				transform: translate(-400%, -50%);
+			}
 
-      padding: $hover-icon-size-rem;
-      left: 50%;
-      top: 50%;
-      z-index: 4;
-      background-repeat: no-repeat;
-      background-size: 50% 50%;
-      background-position: center center;
+			// if $hover-type-transition=='fade'
+			@else {
+				transform: translate(-50%, -50%);
+			}
 
-      @if $hover-type-transition=='slide-up' {
-        transform: translate(-50%, 400%);
-      }
+			@if $hover-icon != "custom" {
+				@if $hover-icon-string != "" {
+					background-image: $hover-icon-string;
+				}
+			}
+		}
 
-      @else if $hover-type-transition=='slide-down' {
-        transform: translate(-50%, -400%);
-      }
+		&:hover::before {
+			opacity: 1;
+			transform: translate(-50%, -50%);
+		}
+	}
 
-      @else if $hover-type-transition=='slide-left' {
-        transform: translate(400%, -50%);
-      }
-
-      @else if $hover-type-transition=='slide-right' {
-        transform: translate(-400%, -50%);
-      }
-
-      // if $hover-type-transition=='fade'
-      @else {
-        transform: translate(-50%, -50%);
-      }
-
-      @if $hover-icon !='custom' {
-        @if $hover-icon-string !='' {
-          background-image: $hover-icon-string;
-        }
-      }
-
-    }
-
-    &:hover::before {
-      opacity: 1;
-      transform: translate(-50%, -50%);
-    }
-  }
-
-  &:hover::after {
-    @if $hover-type-transition=='slide-up'or $hover-type-transition=='slide-down' {
-      opacity: $hover-opacity;
-      transform: translateY(0);
-    }
-
-    @else if $hover-type-transition=='slide-left'or $hover-type-transition=='slide-right' {
-      opacity: $hover-opacity;
-      transform: translateX(0);
-    }
-
-    @else if $hover-type-transition=='fade' {
-      opacity: $hover-opacity;
-    }
-  }
+	&:hover::after {
+		@if $hover-type-transition==
+			"slide-up" or
+			$hover-type-transition==
+			"slide-down"
+		{
+			opacity: $hover-opacity;
+			transform: translateY(0);
+		} @else if
+			$hover-type-transition==
+			"slide-left" or
+			$hover-type-transition==
+			"slide-right"
+		{
+			opacity: $hover-opacity;
+			transform: translateX(0);
+		} @else if $hover-type-transition== "fade" {
+			opacity: $hover-opacity;
+		}
+	}
 }
